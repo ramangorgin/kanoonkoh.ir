@@ -1,0 +1,55 @@
+:root {
+    --color-primary: #e36424;
+    --color-secondary: #43c4fe;
+    --color-text: #222;
+  }
+
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font/dist/font-face.css" rel="stylesheet">
+@font-face {
+    font-family: Yekan;
+    src: url('../../public/fonts/yekan/yekan-regular.eot');
+    src: url('../../public/fonts/yekan/yekan-regular.ttf') format('ttf'),
+         url('../../public/fonts/yekan/yekan-regular.woff') format('woff'),
+         url('../../public/fonts/yekan/Yekan.svg') format('svg'),
+         url('../../public/fonts/yekan/Yekan.eot') format('eot'),
+         url('../../public/fonts/yekan/yekan.ttf') format('ttf'),
+         url('../../public/fonts/yekan/Yekan.woff') format('woff'),
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: Sahel;
+    src: url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-FD-WOL.eot');
+    src: url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-FD-WOL.ttf'), format('ttf'),
+         url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-FD-WOL.woff'), format('woff'),
+         url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-FD-WOL.woff2'), format('woff2'),
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: Sahel-bold;
+    src: url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-Bold-FD-WOL.eot');
+    src: url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-Bold-FD-WOL.ttf'), format('ttf'),
+         url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-Bold-FD-WOL.woff'), format('woff'),
+         url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-Bold-FD-WOL.woff2'), format('woff2'),
+    font-weight: bold;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: Sahel-black;
+    src: url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-Black-FD-WOL.eot');
+    src: url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-Black-FD-WOL.ttf'), format('ttf'),
+         url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-Black-FD-WOL.woff'), format('woff'),
+         url('../../public/fonts/sahel/Farsi-Digits-Without-Latin/Sahel-Black-FD-WOL.woff2'), format('woff2'),
+    font-weight: black;
+    font-style: normal;
+  }
+
+label{
+  font-family: Sahel-bold;
+}
+
+.button-primary{
+    color:white;
+    background-color: var(--color-primary);
+}
