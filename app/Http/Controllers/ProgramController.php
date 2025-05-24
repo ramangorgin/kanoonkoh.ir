@@ -8,8 +8,8 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        $programs = Program::latest()->paginate(10);
-        return view('programs.index', compact('programs'));
+        $programs = \App\Models\Program::all();
+        return view('dashboard.programs', compact('programs'));
     }
 
     public function show(Program $program)

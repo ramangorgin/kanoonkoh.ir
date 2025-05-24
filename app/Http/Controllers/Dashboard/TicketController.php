@@ -9,11 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
+
     public function index()
     {
-        $tickets = Auth::user()->tickets()->latest()->get();
-        return view('dashboard.tickets.index', compact('tickets'));
+        $tickets = auth()->user()->tickets; 
+        return view('dashboard.tickets', compact('tickets'));
     }
+
 
     public function create()
     {

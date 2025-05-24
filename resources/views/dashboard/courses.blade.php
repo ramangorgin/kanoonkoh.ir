@@ -1,6 +1,6 @@
 <h5 class="mb-3">دوره‌های من</h5>
 
-@if(count($courses))
+@if(!empty($courses))
     <div class="table-responsive">
         <table class="table table-bordered align-middle">
             <thead class="table-light">

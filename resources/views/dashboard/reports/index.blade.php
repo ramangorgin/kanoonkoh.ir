@@ -1,12 +1,19 @@
-@extends('dashboard.layout')
+@extends('layouts.app')
+
 
 @section('title', 'گزارش‌های من')
 
 @section('content')
+
+@php
+    $reports = $reports ?? collect(); // جلوگیری از ارور در صورت نبود متغیر
+@endphp
+
 <div class="container py-4">
     <h3 class="mb-4">گزارش‌های نوشته‌شده توسط شما</h3>
 
-    @if($reports->isEmpty())
+    @if(isset($reports) && !$reports->isEmpty())
+
         <div class="alert alert-info">شما تاکنون گزارشی ارسال نکرده‌اید.</div>
     @else
         <table class="table table-bordered table-striped align-middle">

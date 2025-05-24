@@ -38,7 +38,7 @@
         <div class="tab-pane fade" id="membership" role="tabpanel">@include('dashboard.membership')</div>
         <div class="tab-pane fade" id="programs" role="tabpanel">@include('dashboard.programs')</div>
         <div class="tab-pane fade" id="courses" role="tabpanel">@include('dashboard.courses')</div>
-        <div class="tab-pane fade" id="reports" role="tabpanel">@include('dashboard.reports')</div>
+        <div class="tab-pane fade" id="reports" role="tabpanel">@include('dashboard.reports.index')</div>
         <div class="tab-pane fade" id="tickets" role="tabpanel">@include('dashboard.tickets')</div>
         <div class="tab-pane fade" id="settings" role="tabpanel">@include('dashboard.settings')</div>
     </div>

@@ -12,8 +12,9 @@ class CourseController extends Controller
         return view('courses.index', compact('courses'));
     }
 
-    public function show(Course $course)
+    public function showCourses()
     {
-        return view('courses.show', compact('course'));
+        $courses = \App\Models\Course::all();
+        return view('dashboard.courses', compact('courses'));
     }
 }

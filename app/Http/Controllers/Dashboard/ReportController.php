@@ -13,10 +13,11 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $reports = Auth::user()->reports()->latest()->get();
-        return view('dashboard.reports.index', compact('reports'));
-    }    
+        $reports = Report::where('user_id', Auth::id())->get();
 
+        return view('dashboard.reports.index', compact('reports'));
+    }
+    
     public function create()
     {
         $programs = Auth::user()->programs; // فقط برنامه‌هایی که شرکت کرده

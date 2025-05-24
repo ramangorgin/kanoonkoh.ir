@@ -2,7 +2,8 @@
 
 <a href="{{ route('dashboard.tickets.create') }}" class="btn btn-sm btn-outline-primary mb-3">+ ارسال تیکت جدید</a>
 
-@if(count($tickets))
+@if(!empty($tickets) && count($tickets))
+
     <div class="table-responsive">
         <table class="table table-bordered align-middle">
             <thead class="table-light">
