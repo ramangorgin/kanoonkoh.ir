@@ -10,31 +10,24 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    // نمایش فرم ثبت‌نام
-    public function show()
+    public function showRegistrationForm()
     {
         return view('auth.register');
     }
 
-    // پردازش ثبت‌نام
     public function register(Request $request)
     {
-        $request->validate([
-            'first_name' => 'required|string|max:100',
-            'last_name' => 'required|string|max:100',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'unique:users'],
+            'password' => ['required', 'confirmed', 'min:6'],
         ]);
 
         $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'email'      => $request->email,
-            'password'   => Hash::make($request->password),
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
 
         Auth::login($user);
-
-        return redirect('/dashboard'); // بعد از ثبت‌نام وارد پنل کاربری می‌شه
+        return redirect()->route('dashboard.index');
     }
 }

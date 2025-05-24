@@ -2,23 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
-    use HasFactory;
-    
+    protected $fillable = [
+        'title', 'description', 'date',
+        'capacity', 'cost',
+        'is_registration_open', 'registration_deadline',
+        'card_number', 'sheba_number', 'card_holder', 'bank_name',
+    ];
+
+    protected $casts = [
+        'date' => 'date',
+        'registration_deadline' => 'datetime',
+        'is_registration_open' => 'boolean',
+    ];
+
     public function users()
     {
-        return $this->belongsToMany(User::class)->withPivot([
-            'certificate_file', 'submitted_by', 'status', 'notes'
-        ])->withTimestamps();
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
-
-    public function registrations()
-    {
-        return $this->hasMany(CourseRegistration::class);
-    }
-
 }
+

@@ -8,36 +8,34 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    // نمایش فرم لاگین
-    public function show()
+    public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    // پردازش لاگین
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => ['required', 'email'],
+            'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+            return redirect()->intended(route('dashboard.home'));
         }
 
         return back()->withErrors([
-            'email' => 'اطلاعات وارد شده صحیح نیست.',
-        ])->onlyInput('email');
+            'email' => 'ایمیل یا رمز عبور نادرست است.',
+        ])->withInput($request->only('email'));
     }
 
-    // خروج از حساب
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+
+        return redirect('/');
     }
 }

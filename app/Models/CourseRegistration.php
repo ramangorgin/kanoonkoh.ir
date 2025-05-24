@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CourseRegistration extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'course_id', 'user_id',
+        'transaction_code', 'receipt_file', 'approved',
+    ];
 
     public function user()
     {
@@ -18,5 +20,5 @@ class CourseRegistration extends Model
     {
         return $this->belongsTo(Course::class);
     }
-
 }
+

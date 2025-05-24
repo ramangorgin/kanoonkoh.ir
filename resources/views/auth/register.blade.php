@@ -1,45 +1,50 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+@extends('layouts.app')
 
-        <!-- نام -->
-        <div>
-            <x-input-label for="first_name" value="نام"/>
-            <x-text-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" required autofocus />
-            <x-input-error :messages="$errors->get('first_name')" class="mt-2"/>
-        </div>
+@section('title', 'ثبت‌نام')
 
-        <!-- نام خانوادگی -->
-        <div class="mt-4">
-            <x-input-label for="last_name" value="نام خانوادگی"/>
-            <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" required />
-            <x-input-error :messages="$errors->get('last_name')" class="mt-2"/>
-        </div>
+@section('content')
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-sm p-4" style="width: 100%; max-width: 500px;">
+        <h4 class="mb-4 text-center">ایجاد حساب کاربری</h4>
 
-        <!-- ایمیل -->
-        <div class="mt-4">
-            <x-input-label for="email" value="ایمیل"/>
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" required />
-            <x-input-error :messages="$errors->get('email')" class="mt-2"/>
-        </div>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
 
-        <!-- رمز عبور -->
-        <div class="mt-4">
-            <x-input-label for="password" value="رمز عبور"/>
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required />
-            <x-input-error :messages="$errors->get('password')" class="mt-2"/>
-        </div>
+            {{-- ایمیل --}}
+            <div class="mb-3">
+                <label for="email" class="form-label">ایمیل</label>
+                <input type="email" id="email" name="email"
+                       class="form-control @error('email') is-invalid @enderror"
+                       value="{{ old('email') }}" required autofocus>
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <!-- تایید رمز عبور -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" value="تایید رمز عبور"/>
-            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
-        </div>
+            {{-- رمز عبور --}}
+            <div class="mb-3">
+                <label for="password" class="form-label">رمز عبور</label>
+                <input type="password" id="password" name="password"
+                       class="form-control @error('password') is-invalid @enderror"
+                       required>
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button class="ml-4">
-                ثبت‌نام
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+            {{-- تکرار رمز عبور --}}
+            <div class="mb-4">
+                <label for="password_confirmation" class="form-label">تکرار رمز عبور</label>
+                <input type="password" id="password_confirmation" name="password_confirmation"
+                       class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">ثبت‌نام</button>
+
+            <div class="text-center mt-3">
+                <small>حساب دارید؟ <a href="{{ route('login') }}">ورود</a></small>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
