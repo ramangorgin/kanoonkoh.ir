@@ -109,3 +109,20 @@ html {
       font-weight: bold;
       margin-bottom: 5px;
   }
+  .persian-datepicker {
+      font-family: Vazir, Tahoma, sans-serif !important;
+      direction: rtl;
+  }
+  .persian-datepicker .month-year {
+      font-family: 'Vazir';
+      font-size: 16px;
+      font-weight: bold;
+  }
+  /* برای MdPersianDateTimePicker */
+  .md-datepicker {
+      font-family: 'Vazir', 'Segoe UI', Tahoma !important;
+  }
+
+  .md-datepicker-header {
+      font-family: 'Vazir', 'Segoe UI', Tahoma !important;
+  }

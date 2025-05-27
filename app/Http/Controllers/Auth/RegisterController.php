@@ -4,30 +4,35 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    public function showRegistrationForm()
+
+    use RegistersUsers;
+
+    protected $redirectTo = '/dashboard';
+
+    public function __construct()
     {
-        return view('auth.register');
+        $this->middleware('guest');
     }
 
-    public function register(Request $request)
+    protected function validator(array $data)
     {
-        $validated = $request->validate([
-            'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'confirmed', 'min:6'],
+        return Validator::make($data, [
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
+    }
 
-        $user = User::create([
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+    protected function create(array $data)
+    {
+        return User::create([
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']), 
         ]);
-
-        Auth::login($user);
-        return redirect()->route('dashboard.index');
     }
 }

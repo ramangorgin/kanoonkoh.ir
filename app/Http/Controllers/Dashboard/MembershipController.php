@@ -9,9 +9,14 @@ use App\Models\Course;
 use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Morilog\Jalali\Jalalian;
+
 
 class MembershipController extends Controller
 {
+    /**
+     * نمایش فرم پرداخت (هم create هم index از این استفاده می‌کنند)
+     */
     public function index()
     {
         return $this->prepareMembershipData();
@@ -22,6 +27,9 @@ class MembershipController extends Controller
         return $this->prepareMembershipData();
     }
 
+    /**
+     * ذخیره پرداخت جدید
+     */
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -41,18 +49,27 @@ class MembershipController extends Controller
 
         Membership::create($data);
 
-        return redirect()->route('dashboard.membership')->with('success', 'ثبت انجام شد.');
+        return redirect()->route('dashboard.membership')->with('success', 'پرداخت با موفقیت ثبت شد.');
     }
 
+    /**
+     * آماده‌سازی داده‌ها برای نمایش فرم
+     */
     protected function prepareMembershipData()
     {
         $user = auth()->user();
+
+        $jalaliYears = collect(range(now()->year, now()->year - 5))
+            ->map(fn($year) => [
+                'gregorian' => $year,
+                'jalali' => Jalalian::fromDateTime("$year-03-21")->getYear(),
+            ]);
 
         return view('dashboard.membership', [
             'latestTransaction' => optional($user->transactions()->latest()->first()),
             'recentCourses' => Course::latest()->take(5)->get(),
             'recentPrograms' => Program::latest()->take(5)->get(),
-            'membershipYears' => range(now()->year, now()->year - 5),
+            'membershipYears' => $jalaliYears,
             'programs' => Program::all(),
         ]);
     }

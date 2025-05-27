@@ -35,15 +35,16 @@
                 <select name="related_id" id="related_item" class="form-select"></select>
             </div>
 
-            {{-- سال عضویت --}}
+            {{-- سال عضویت (شمسی) --}}
             <div class="mb-3 col-md-6 d-none" id="membership_year_wrapper">
-                <label class="form-label">سال عضویت</label>
+                <label class="form-label">سال عضویت (شمسی)</label>
                 <select name="year" id="membership_year" class="form-select">
-                    @foreach($membershipYears as $year)
-                        <option value="{{ $year }}">{{ $year }}</option>
+                    @foreach($membershipYears as $pair)
+                        <option value="{{ $pair['gregorian'] }}">{{ $pair['jalali'] }}</option>
                     @endforeach
                 </select>
             </div>
+
 
             {{-- فایل رسید --}}
             <div class="mb-3 col-md-12">

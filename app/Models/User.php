@@ -12,8 +12,9 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'email',
-        'password',
+        'first_name', 'last_name', 'membership_level',
+        'membership_date', 'score', 'avatar',
+        'email', 'password'
     ];
 
     protected $hidden = [
@@ -21,11 +22,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    // روابط
 
     public function profile()
     {
-        return $this->hasOne(Profile::class);
+        return $this->hasOne(\App\Models\Profile::class);
     }
 
     public function insurance()
@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Transaction::class);
     }    
+    public function isProfileComplete()
+    {
+        return $this->first_name && $this->last_name && $this->avatar &&
+            $this->membership_level && $this->membership_date && $this->score;
+    }
 }

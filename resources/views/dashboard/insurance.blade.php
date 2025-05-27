@@ -21,15 +21,14 @@
             {{-- تاریخ صدور --}}
             <div class="mb-3 col-md-6">
                 <label class="form-label">تاریخ صدور بیمه</label>
-                <input type="date" name="issued_at" class="form-control"
-                       value="{{ old('issued_at', optional($insurance?->issued_at)->format('Y-m-d')) }}" required>
+                <input type="text" name="issued_at" class="form-control datepicker" id="issued_at" value="{{ old('issued_at', optional($insurance?->issued_at)->format('Y-m-d')) }}" required>
+
             </div>
 
             {{-- تاریخ انقضا --}}
             <div class="mb-3 col-md-6">
                 <label class="form-label">تاریخ انقضا بیمه</label>
-                <input type="date" name="expires_at" class="form-control"
-                       value="{{ old('expires_at', optional($insurance?->expires_at)->format('Y-m-d')) }}" required>
+                <input type="text" name="expires_at" class="form-control datepicker" id="expires_at" value="{{ old('expires_at', optional($insurance?->expires_at)->format('Y-m-d')) }}" required>
             </div>
 
             {{-- فایل فعلی --}}
@@ -50,4 +49,24 @@
         <button type="submit" class="btn btn-primary">ذخیره اطلاعات بیمه</button>
     </form>
 </div>
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        $(".datepicker").MdPersianDateTimePicker({
+            targetTextSelector: "#issued_at",
+            textFormat: "yyyy/MM/dd",
+            englishNumber: true
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $(".datepicker").MdPersianDateTimePicker({
+            targetTextSelector: "#expires_at",
+            textFormat: "yyyy/MM/dd",
+            englishNumber: true
+        });
+    });
+</script>
+@endpush
 @endsection

@@ -1,3 +1,9 @@
+@extends('layouts.app')
+
+@section('title', 'پشتیبانی')
+
+@section('content')
+<div class="px-5 py-5">
 <h5 class="mb-3">تیکت‌های من</h5>
 
 <a href="{{ route('dashboard.tickets.create') }}" class="btn btn-sm btn-outline-primary mb-3">+ ارسال تیکت جدید</a>
@@ -38,6 +44,9 @@
             </tbody>
         </table>
     </div>
+
 @else
     <p>تاکنون هیچ تیکتی ارسال نکرده‌اید.</p>
 @endif
+</div>
+@endsection

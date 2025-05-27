@@ -16,6 +16,10 @@
 
         <div class="alert alert-info">شما تاکنون گزارشی ارسال نکرده‌اید.</div>
     @else
+    <a href="{{ route('dashboard.reports.create') }}" class="btn btn-primary mb-4">
+        + ثبت گزارش جدید
+    </a>
+
         <table class="table table-bordered table-striped align-middle">
             <thead>
                 <tr>

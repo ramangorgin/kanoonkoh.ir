@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
-    protected $fillable = [
+   protected $fillable = [
         'user_id',
         'first_name',
         'last_name',
@@ -14,7 +14,6 @@ class Profile extends Model
         'birth_date',
         'father_name',
         'national_id',
-        'personal_photo',
         'phone',
         'emergency_phone',
         'province',
@@ -22,7 +21,25 @@ class Profile extends Model
         'address',
         'postal_code',
         'previous_courses',
+        'personal_photo',
+        'blood_type',
+        'job',
+        'introducer',
+        'height',
+        'weight',
+        'physical_condition',
+        'allergies',
+        'medications',
+        'had_surgery',
+        'emergency_person_name',
+        'emergency_person_relation',
+        'role', // عضو یا ادمین
+        'membership_level',
+        'membership_status',
+        'membership_date',
+        'points'
     ];
+    
 
     protected $casts = [
         'previous_courses' => 'array',
@@ -35,4 +52,3 @@ class Profile extends Model
     }
 }
  use HasFactory;
-}

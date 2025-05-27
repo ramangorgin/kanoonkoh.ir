@@ -1,46 +1,128 @@
-{{-- resources/views/dashboard/index.blade.php --}}
-@extends('layouts.dashboard')
+@extends('layouts.app')
+
+@section('title', 'پنل کاربری')
 
 @section('content')
-<div class="container mt-4">
-    <h2 class="mb-4">داشبورد کاربری</h2>
+<div class="container py-4">
+    {{-- نمایش پیام خوش‌آمدگویی و درخواست تکمیل پروفایل --}}
+    @if($needsCompletion)
+        <div class="alert alert-warning">
+            <h5 class="mb-2">کاربر گرامی، عضویت شما هنوز کامل نشده است</h5>
+            <ul class="mb-0">
+                <li>لطفاً <a href="{{ route('dashboard.profile') }}">مشخصات کاربری</a> خود را کامل کنید.</li>
+                <li> <a href="{{ route('dashboard.insurance') }}">بیمه ورزشی</a> خود را بارگذاری نمایید.</li>
+                <li> <a href="{{ route('dashboard.membership') }}">حق عضویت سال جاری</a> را پرداخت نمایید.</li>
+            </ul>
+        </div>
+    @endif
 
-    <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab">مشخصات من</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="insurance-tab" data-bs-toggle="tab" data-bs-target="#insurance" type="button" role="tab">بیمه ورزشی من</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="membership-tab" data-bs-toggle="tab" data-bs-target="#membership" type="button" role="tab">حق‌عضویت‌های من</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="programs-tab" data-bs-toggle="tab" data-bs-target="#programs" type="button" role="tab">برنامه‌های من</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="courses-tab" data-bs-toggle="tab" data-bs-target="#courses" type="button" role="tab">دوره‌های من</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="reports-tab" data-bs-toggle="tab" data-bs-target="#reports" type="button" role="tab">گزارش‌های من</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="tickets-tab" data-bs-toggle="tab" data-bs-target="#tickets" type="button" role="tab">تیکت‌های من</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab">تنظیمات</button>
-        </li>
-    </ul>
+    {{-- اطلاعات کلی کاربر، فقط وقتی عضویت تکمیل شده باشد --}}
+    @if (!$needsCompletion)
+        <div class="card mb-4">
+            <div class="card-body d-flex align-items-center">
+                <img src="{{ $user->profile_photo_url ?? asset('images/default-avatar.png') }}"
+                    class="rounded-circle me-3" width="80" height="80" alt="avatar">
+                <div>
+                    <h5 class="mb-0">{{ $user->first_name }} {{ $user->last_name }}</h5>
+                    <small class="text-muted">سطح عضویت: {{ $user->membership_level ?? 'تعریف نشده' }}</small><br>
+                    <small class="text-muted">
+                        تاریخ عضویت:
+                        {{ $user->membership_date ? jdate($user->membership_date)->format('Y/m/d') : '---' }}
+                    </small><br>
+                    <small class="text-muted">امتیاز: {{ $user->points ?? 0 }}</small>
+                </div>
+            </div>
+        </div>
+    @endif
 
-    <div class="tab-content mt-3" id="dashboardTabsContent">
-        <div class="tab-pane fade show active" id="profile" role="tabpanel">@include('dashboard.profile')</div>
-        <div class="tab-pane fade" id="insurance" role="tabpanel">@include('dashboard.insurance')</div>
-        <div class="tab-pane fade" id="membership" role="tabpanel">@include('dashboard.membership')</div>
-        <div class="tab-pane fade" id="programs" role="tabpanel">@include('dashboard.programs')</div>
-        <div class="tab-pane fade" id="courses" role="tabpanel">@include('dashboard.courses')</div>
-        <div class="tab-pane fade" id="reports" role="tabpanel">@include('dashboard.reports.index')</div>
-        <div class="tab-pane fade" id="tickets" role="tabpanel">@include('dashboard.tickets')</div>
-        <div class="tab-pane fade" id="settings" role="tabpanel">@include('dashboard.settings')</div>
+
+    <div class="row g-4">
+
+        {{-- مشخصات کاربری --}}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">مشخصات کاربری</div>
+                <div class="card-body">
+                    <p><strong>نام:</strong> {{ auth()->user()->name }}</p>
+                    <p><strong>ایمیل:</strong> {{ auth()->user()->email }}</p>
+                    <a href="{{ route('dashboard.profile') }}" class="btn btn-sm btn-outline-primary">ویرایش مشخصات</a>
+                </div>
+            </div>
+        </div>
+
+        {{-- بیمه ورزشی --}}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">بیمه ورزشی</div>
+                <div class="card-body">
+                    <p>وضعیت آخرین بیمه شما:</p>
+                    {{-- اطلاعات بیمه از مدل insurance بارگزاری بشه --}}
+                    <a href="{{ route('dashboard.insurance') }}" class="btn btn-sm btn-outline-primary">مشاهده / ویرایش بیمه</a>
+                </div>
+            </div>
+        </div>
+
+        {{-- پرداخت‌ها --}}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">پرداخت‌ها</div>
+                <div class="card-body">
+                    <p>لیست تراکنش‌های اخیر شما در این بخش نمایش داده خواهد شد.</p>
+                    <a href="{{ route('dashboard.membership') }}" class="btn btn-sm btn-outline-primary">پرداخت جدید</a>
+                </div>
+            </div>
+        </div>
+
+        {{-- برنامه‌های من --}}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">برنامه‌های من</div>
+                <div class="card-body">
+                    <a href="{{ route('dashboard.participation') }}" class="btn btn-sm btn-outline-primary">مشاهده برنامه‌ها</a>
+                </div>
+            </div>
+        </div>
+
+        {{-- دوره‌های من --}}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">دوره‌های من</div>
+                <div class="card-body">
+                    <a href="{{ route('courses.index') }}" class="btn btn-sm btn-outline-primary">مشاهده دوره‌ها</a>
+                </div>
+            </div>
+        </div>
+
+        {{-- گزارش‌های من --}}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">گزارش‌های من</div>
+                <div class="card-body">
+                    <a href="{{ route('dashboard.reports.index') }}" class="btn btn-sm btn-outline-primary">مشاهده گزارش‌ها</a>
+                </div>
+            </div>
+        </div>
+
+        {{-- پشتیبانی --}}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">پشتیبانی</div>
+                <div class="card-body">
+                    <a href="{{ route('dashboard.tickets.index') }}" class="btn btn-sm btn-outline-primary">ارسال تیکت</a>
+                </div>
+            </div>
+        </div>
+
+        {{-- تنظیمات --}}
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">تنظیمات حساب</div>
+                <div class="card-body">
+                    <a href="{{ route('dashboard.settings') }}" class="btn btn-sm btn-outline-secondary">تغییر رمز عبور</a>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 @endsection

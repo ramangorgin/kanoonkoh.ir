@@ -13,7 +13,7 @@ class TicketController extends Controller
     public function index()
     {
         $tickets = auth()->user()->tickets; 
-        return view('dashboard.tickets', compact('tickets'));
+        return view('dashboard.tickets.index', compact('tickets'));
     }
 
 

@@ -1,4 +1,11 @@
+@extends('layouts.app')
+
+@section('title', 'تنظیمات حساب')
+
+@section('content')
+
 {{-- resources/views/dashboard/settings.blade.php --}}
+<div class="px-5 py-5">
 <h5 class="mb-3">تنظیمات حساب کاربری</h5>
 
 <form method="POST" action="{{ route('dashboard.settings.updatePassword') }}">
@@ -23,3 +30,5 @@
 
     <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
 </form>
+</div>
+@endsection

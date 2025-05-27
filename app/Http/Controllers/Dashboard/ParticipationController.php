@@ -11,11 +11,11 @@ class ParticipationController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-
-        $programs = $user->programs()->with('pivot')->latest()->get();
-        $courses = $user->courses()->with('pivot')->latest()->get();
-
-        return view('dashboard.participation.index', compact('programs', 'courses'));
+        $user = auth()->user();
+    
+        $programs = $user->programs; 
+    
+        return view('dashboard.participation.index', compact('programs'));
     }
+    
 }
