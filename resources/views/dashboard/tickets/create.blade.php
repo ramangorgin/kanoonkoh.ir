@@ -1,6 +1,12 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'ارسال تیکت جدید')
+
+@section('breadcrumb')
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> /
+    <a href="{{ route('dashboard.reports.index') }}">تیکت‌ها</a> /
+    <span>ارسال تیکت جدید</span>
+@endsection
 
 @section('content')
 <div class="container my-5">

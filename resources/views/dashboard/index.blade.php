@@ -1,6 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
-@section('title', 'پنل کاربری')
+
+@section('title', 'داشبورد')
+
 
 @section('content')
 <div class="container py-4">
@@ -11,7 +13,7 @@
             <ul class="mb-0">
                 <li>لطفاً <a href="{{ route('dashboard.profile') }}">مشخصات کاربری</a> خود را کامل کنید.</li>
                 <li> <a href="{{ route('dashboard.insurance') }}">بیمه ورزشی</a> خود را بارگذاری نمایید.</li>
-                <li> <a href="{{ route('dashboard.membership') }}">حق عضویت سال جاری</a> را پرداخت نمایید.</li>
+                <li> <a href="{{ route('dashboard.payments') }}">حق عضویت سال جاری</a> را پرداخت نمایید.</li>
             </ul>
         </div>
     @endif
@@ -68,7 +70,7 @@
                 <div class="card-header">پرداخت‌ها</div>
                 <div class="card-body">
                     <p>لیست تراکنش‌های اخیر شما در این بخش نمایش داده خواهد شد.</p>
-                    <a href="{{ route('dashboard.membership') }}" class="btn btn-sm btn-outline-primary">پرداخت جدید</a>
+                    <a href="{{ route('dashboard.payments') }}" class="btn btn-sm btn-outline-primary">پرداخت جدید</a>
                 </div>
             </div>
         </div>
@@ -78,7 +80,7 @@
             <div class="card">
                 <div class="card-header">برنامه‌های من</div>
                 <div class="card-body">
-                    <a href="{{ route('dashboard.participation') }}" class="btn btn-sm btn-outline-primary">مشاهده برنامه‌ها</a>
+                    <a href="{{ route('dashboard.programs') }}" class="btn btn-sm btn-outline-primary">مشاهده برنامه‌ها</a>
                 </div>
             </div>
         </div>
@@ -88,7 +90,7 @@
             <div class="card">
                 <div class="card-header">دوره‌های من</div>
                 <div class="card-body">
-                    <a href="{{ route('courses.index') }}" class="btn btn-sm btn-outline-primary">مشاهده دوره‌ها</a>
+                    <a href="{{ route('dashboard.courses') }}" class="btn btn-sm btn-outline-primary">مشاهده دوره‌ها</a>
                 </div>
             </div>
         </div>

@@ -1,6 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
-@section('title', 'پشتیبانی')
+@section('title', 'تیکت‌های من')
+
+@section('breadcrumb')
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> /
+    <span>تیکت‌های من</span>
+@endsection
 
 @section('content')
 <div class="px-5 py-5">

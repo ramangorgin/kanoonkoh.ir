@@ -1,3 +1,13 @@
+@extends('layouts.dashboard')
+
+@section('title', 'دوره‌های من')
+
+@section('breadcrumb')
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> / <span>دوره‌های من</span>
+@endsection
+
+@section('content')
+
 <h5 class="mb-3">دوره‌های من</h5>
 
 @if(!empty($courses))
@@ -57,5 +67,8 @@
         </table>
     </div>
 @else
-    <p>شما هنوز در هیچ دوره‌ای ثبت‌نام نکرده‌اید.</p>
+<div class="alert alert-warning">
+شما هنوز در هیچ دوره‌ای شرکت نکرده‌اید.     
+    </div>
 @endif
+@endsection

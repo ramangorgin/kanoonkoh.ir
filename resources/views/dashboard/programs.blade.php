@@ -1,3 +1,14 @@
+@extends('layouts.dashboard')
+
+@section('title', 'برنامه‌های من')
+
+@section('breadcrumb')
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> / <span>برنامه‌های من</span>
+@endsection
+
+@section('content')
+
+<h5 class="mb-3">برنامه‌های من</h5>
 {{-- بررسی ایمن برای اطمینان از وجود و شمارش‌پذیر بودن $programs --}}
 @if(isset($programs) && count($programs))
     <div class="table-responsive">
@@ -28,6 +39,7 @@
     </div>
 @else
     <div class="alert alert-warning">
-        برنامه‌ای برای نمایش وجود ندارد.
+شما هنوز در هیچ برنامه‌ای شرکت نکرده‌اید.     
     </div>
 @endif
+@endsection

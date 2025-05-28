@@ -2,6 +2,27 @@
 
 @section('title', $report->title)
 
+@push('styles')
+<style>
+    .report-content {
+        line-height: 1.8;
+    }
+    .report-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="container py-4">
 
@@ -43,26 +64,62 @@
                 @endif
             </table>
         </div>
+    </div>
 
-        {{-- مسئولین --}}
-        <div class="col-md-6">
-            <h4 class="fw-bold">مسئولان برنامه</h4>
-            <div class="row g-3">
-                @foreach ([
-                    'سرپرست' => $report->leader,
-                    'کمک‌سرپرست' => $report->assistantLeader,
-                    'مسئول فنی' => $report->technicalManager,
-                    'راهنما' => $report->guide,
-                    'پشتیبان' => $report->support
-                ] as $role => $person)
-                    @if ($person)
-                        <div class="col-6">
-                            <div class="card text-center">
-                                <img src="{{ asset('storage/' . optional($person->profile)->profile_photo ?? 'default.png') }}" class="card-img-top mx-auto mt-2 rounded-circle" style="width:80px;height:80px;object-fit:cover;">
-                                <div class="card-body">
-                                    <h6 class="card-title">{{ $person->first_name }} {{ $person->last_name }}</h6>
-                                    <p class="card-text text-muted small">{{ $role }}</p>
+    <div class="col-md-4">
+            {{-- نمایش نقش‌ها در کارت‌های جداگانه --}}
+            @foreach([
+                'leader' => ['title' => 'سرپرست', 'icon' => 'bi-person-arms-up', 'color' => 'primary'],
+                'assistant_leader' => ['title' => 'کمک سرپرست', 'icon' => 'bi-person-heart', 'color' => 'info'],
+                'technical_manager' => ['title' => 'مسئول فنی', 'icon' => 'bi-tools', 'color' => 'warning'],
+                'support' => ['title' => 'پشتیبان', 'icon' => 'bi-shield-check', 'color' => 'success'],
+                'guide' => ['title' => 'راهنما', 'icon' => 'bi-signpost-split', 'color' => 'danger']
+            ] as $role => $roleData)
+                @if($report->{$role.'_name'})
+                    <div class="card mb-3 border-{{ $roleData['color'] }}">
+                        <div class="card-header bg-{{ $roleData['color'] }} text-white">
+                            <div class="d-flex align-items-center">
+                                <i class="bi {{ $roleData['icon'] }} fs-5 me-2"></i>
+                                <h6 class="mb-0">{{ $roleData['title'] }}</h6>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            @php
+                                $user = \App\Models\User::where('first_name', 'like', '%'.$report->{$role.'_name'}.'%')
+                                    ->orWhere('last_name', 'like', '%'.$report->{$role.'_name'}.'%')
+                                    ->first();
+                            @endphp
+
+                            @if($user)
+                                {{-- اگر کاربر پیدا شد --}}
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                        <img src="{{ $user->profile_photo_url ?? asset('images/default-avatar.png') }}" 
+                                             class="rounded-circle border border-{{ $roleData['color'] }}" 
+                                             width="60" 
+                                             height="60" 
+                                             alt="{{ $user->full_name }}">
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0">{{ $user->first_name }} {{ $user->last_name }}</h6>
+                                        <small class="text-muted">
+                                            <i class="bi {{ $roleData['icon'] }}"></i>
+                                            {{ $roleData['title'] }}
+                                        </small>
+                                    </div>
                                 </div>
+                                @else
+                                    {{-- اگر کاربر پیدا نشد --}}
+                                    <div class="text-center py-2">
+                                        <div class="text-{{ $roleData['color'] }} mb-2">
+                                            <i class="bi {{ $roleData['icon'] }} fs-1"></i>
+                                        </div>
+                                        <h5 class="mb-1">{{ $report->{$role.'_name'} }}</h5>
+                                        <span class="badge bg-{{ $roleData['color'] }}">
+                                            {{ $roleData['title'] }}
+                                        </span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     @endif

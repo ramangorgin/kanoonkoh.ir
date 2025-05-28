@@ -1,6 +1,13 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'ثبت گزارش')
+
+
+@section('breadcrumb')
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> /
+    <a href="{{ route('dashboard.reports.index') }}">گزارش‌ها</a> /
+    <span>ثبت گزارش</span>
+@endsection
 
 @section('content')
 <div class="container py-4">
@@ -65,16 +72,13 @@
 
 {{-- نقش‌ها --}}
 @foreach (['leader', 'assistant_leader', 'technical_manager', 'support', 'guide'] as $role)
-<div class="mb-3">
-    <label class="form-label">{{ __('انتخاب ') . __("roles.$role") }}</label>
-    <select name="{{ $role }}_id" class="form-select select2">
-        <option value="">-- انتخاب کنید --</option>
-        @foreach($users as $user)
-            <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }}</option>
-        @endforeach
-    </select>
-</div>
+    <div class="mb-3">
+        <label class="form-label">{{ __('نام ') . __("roles.$role") }}</label>
+        <input type="text" name="{{ $role }}_name" class="form-control"
+               placeholder="مثلاً: رامان گرگین پاوه">
+    </div>
 @endforeach
+
 
 {{-- ویژگی فنی --}}
 <div class="mb-3">
@@ -284,7 +288,7 @@
 
 <div class="mb-3">
     <label>متن کامل گزارش</label>
-    <textarea name="full_report" class="form-control" rows="50"></textarea>
+    <textarea name="full_report" id="full_report" class="form-control" rows="20"></textarea>
 </div>
 
 <button class="btn btn-primary mt-3">ثبت گزارش</button>
@@ -299,6 +303,29 @@
 <!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+
+<script>
+    ClassicEditor
+        .create(document.querySelector('#full_report'), {
+            language: 'fa',
+            toolbar: {
+                items: [
+                    'heading', '|',
+                    'bold', 'italic', 'underline', 'strikethrough', '|',
+                    'bulletedList', 'numberedList', '|',
+                    'alignment', '|',
+                    'link', 'blockQuote', 'insertTable', '|',
+                    'undo', 'redo'
+                ],
+                shouldNotGroupWhenFull: true
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 
 <script>
 $(document).ready(function () {

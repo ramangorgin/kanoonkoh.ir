@@ -22,7 +22,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-
+    public function notifications() {
+        return $this->hasMany(Notification::class);
+    }
+    
     public function profile()
     {
         return $this->hasOne(\App\Models\Profile::class);

@@ -1,6 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'تنظیمات حساب')
+
+@section('breadcrumb')
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> / <span>تنظیمات حساب کاربری</span>
+@endsection
 
 @section('content')
 

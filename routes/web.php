@@ -25,10 +25,10 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\InsuranceController;
-use App\Http\Controllers\Dashboard\MembershipController;
+use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\TicketController;
+use App\Http\Controllers\Dashboard\SettingsController;
 use App\Http\Controllers\Dashboard\ReportController;
-use App\Http\Controllers\Dashboard\ParticipationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +36,7 @@ use App\Http\Controllers\Dashboard\ParticipationController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('index');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -89,24 +87,35 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 | داشبورد کاربر
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->prefix('dashboard')->name('dashboard.')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('index');
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/courses', [DashboardController::class, 'courses'])->name('dashboard.courses');
+        Route::get('/programs', [DashboardController::class, 'programs'])->name('dashboard.programs');
 
-    Route::get('profile', [ProfileController::class, 'show'])->name('profile');
-    Route::post('profile', [ProfileController::class, 'store'])->name('profile.store');
-    Route::post('profile/update', [ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/profile', [ProfileController::class, 'show'])->name('dashboard.profile');
+        Route::post('/profile', [ProfileController::class, 'store'])->name('dashboard.profile.store');
+    
+        Route::get('/insurance', [InsuranceController::class, 'show'])->name('dashboard.insurance');
+        Route::post('/insurance', [InsuranceController::class, 'store'])->name('dashboard.insurance.store');
+        Route::patch('/insurance', [InsuranceController::class, 'update'])->name('dashboard.insurance.update');
+        
+        Route::get('/payments', [PaymentController::class, 'index'])->name('dashboard.payments');
+        Route::post('/payments/store', [PaymentController::class, 'store'])->name('dashboard.payment.store');
 
-    Route::get('insurance', [InsuranceController::class, 'show'])->name('insurance');
-    Route::post('insurance', [InsuranceController::class, 'store'])->name('insurance.store');
-    Route::post('insurance/update', [InsuranceController::class, 'update'])->name('insurance.update');
+        Route::get('/tickets', [TicketController::class, 'index'])->name('dashboard.tickets.index');
+        Route::get('/tickets/create', [TicketController::class, 'create'])->name('dashboard.tickets.create');
+        Route::post('/tickets/create', [TicketController::class, 'store'])->name('dashboard.tickets.store');
 
-    Route::get('membership', [MembershipController::class, 'index'])->name('membership');
-    Route::get('membership/create', [MembershipController::class, 'create'])->name('membership.create');
-    Route::post('membership/submit', [MembershipController::class, 'store'])->name('membership.submit');
+        Route::get('/settings', [DashboardController::class, 'settings'])->name('dashboard.settings');
+        Route::post('/settings', [SettingsController::class, 'updatePassword'])->name('dashboard.settings.updatePassword');
 
-    Route::resource('tickets', TicketController::class)->only(['index', 'create', 'store', 'show']);
-    Route::resource('reports', ReportController::class)->except(['destroy']);
+        // Reports
+        Route::get('/reports', [ReportController::class, 'index'])->name('dashboard.reports.index');
+        Route::get('/reports/create', [ReportController::class, 'create'])->name('dashboard.reports.create');
+        Route::get('/reports/edit', [ReportController::class, 'edit'])->name('dashboard.reports.edit');
+        Route::get('/reports/show', [ReportController::class, 'show'])->name('dashboard.reports.show');
+        Route::post('/reports/create', [ReportController::class, 'store'])->name('dashboard.reports.create');
 
-    Route::get('settings', [DashboardController::class, 'settings'])->name('settings');
-    Route::get('participation', [ParticipationController::class, 'index'])->name('participation');
+    });
 });

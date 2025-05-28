@@ -1,6 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'بیمه ورزشی')
+
+@section('breadcrumb')
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> / <span>بیمه ورزشی</span>
+@endsection
 
 @section('content')
 <div class="container my-5">

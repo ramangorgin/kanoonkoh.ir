@@ -1,11 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
 @section('title', 'تکمیل مشخصات کاربری')
 
+@section('breadcrumb')
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> / <span>مشخصات کاربری</span>
+@endsection
+
 @section('content')
+
 <div class="container py-4">
     <h4 class="mb-4">تکمیل مشخصات کاربری</h4>
-    <form action="{{ route('dashboard.profile.update') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('dashboard.profile.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 

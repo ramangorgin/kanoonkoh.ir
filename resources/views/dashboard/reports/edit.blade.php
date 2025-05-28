@@ -2,6 +2,13 @@
 
 @section('title', 'ویرایش گزارش')
 
+
+@section('breadcrumb')
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> /
+    <a href="{{ route('dashboard.reports.index') }}">گزارش‌ها</a> /
+    <span>ویرایش گزارش</span>
+@endsection
+
 @section('content')
 <div class="px-5 py-5">
 

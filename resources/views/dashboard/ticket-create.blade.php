@@ -1,3 +1,13 @@
+@extends('layouts.dashboard')
+
+@section('title', 'ارسال تیکت')
+
+@section('breadcrumb')
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> / <span>ارسال تیکت</span>
+@endsection
+
+@section('content')
+
 <h5 class="mb-4">ارسال تیکت جدید</h5>
 
 <form method="POST" action="{{ route('dashboard.tickets.store') }}" enctype="multipart/form-data">
@@ -32,3 +42,4 @@
 
     <button type="submit" class="btn btn-primary">ارسال تیکت</button>
 </form>
+@endsection

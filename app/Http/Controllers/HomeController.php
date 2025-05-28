@@ -13,7 +13,7 @@ class HomeController extends Controller
         return view('index', [
             'latestPrograms' => Program::latest()->take(3)->get(),
             'latestCourses' => Course::latest()->take(3)->get(),
-            'latestReports' => Report::where('approved', true)->latest()->take(2)->get(),
+            'latestReports' => Report::where('approved', true)->latest()->take(3)->get(),
         ]);
     }
 }
