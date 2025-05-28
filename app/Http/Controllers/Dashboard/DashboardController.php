@@ -4,11 +4,21 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
 class DashboardController extends Controller
 {
     public function index()
     {
         $user = Auth::user();
+
+        $notifications = Notification::where('user_id', $user->id)
+            ->latest()
+            ->take(5)
+            ->get();
+    
+        $unreadCount = Notification::where('user_id', $user->id)
+            ->where('is_read', false)
+            ->count();
     
         return view('dashboard.index', [
             'user' => $user,
@@ -17,6 +27,8 @@ class DashboardController extends Controller
             'courses' => $user->courses()->latest()->get(),
             'reports' => $user->reports()->latest()->get(),
             'tickets' => $user->tickets()->latest()->get(),
+            'notifications' => $notifications,
+            'unreadCount' => $unreadCount,
         ]);
     }
     public function profile()

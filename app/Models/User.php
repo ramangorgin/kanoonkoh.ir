@@ -38,7 +38,7 @@ class User extends Authenticatable
 
     public function memberships()
     {
-        return $this->hasMany(Membership::class);
+        return $this->hasMany(Payment::class);
     }
 
     public function programs()

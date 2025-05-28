@@ -21,13 +21,15 @@
         <div class="d-none d-lg-flex order-3 align-items-center gap-3">
             {{-- دکمه نوتیفیکیشن --}}
             <div class="dropdown">
-                <button class="btn btn-link text-dark position-relative" type="button" id="notificationDropdown" 
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-bell fs-4"></i>
-                    <span style="position: absolute; top: 0; left: 0; transform: translate(-40%, -40%); background-color: red; color: white; font-size: 0.7rem; padding: 2px 5px; border-radius: 50%;" >
-                    {{ $unreadCount }}
+            <button class="btn btn-link text-dark position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-bell fs-4"></i>
+                @if($unreadCount > 0)
+                    <span style="position: absolute; top: 0; left: 0; transform: translate(-40%, -40%); background-color: red; color: white; font-size: 0.7rem; padding: 2px 5px; border-radius: 50%;">
+                        {{ $unreadCount }}
                     </span>
-                </button>
+                @endif
+            </button>
+
                 <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="notificationDropdown" style="width: 350px;">
                     <li class="px-3 py-2 d-flex justify-content-between align-items-center">
                         <h6 class="mb-0">اعلان‌ها</h6>
@@ -35,29 +37,20 @@
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     {{-- نمونه اعلان‌ها --}}
-                    <li>
-                        <a href="#" class="dropdown-item d-flex gap-3 py-2">
-                            <div class="bg-primary bg-opacity-10 p-2 rounded">
-                                <i class="bi bi-calendar-check text-primary"></i>
-                            </div>
-                            <div>
-                                <small class="text-muted">دیروز</small>
-                                <p class="mb-0">برنامه قله دماوند تایید شد</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="dropdown-item d-flex gap-3 py-2">
-                            <div class="bg-success bg-opacity-10 p-2 rounded">
-                                <i class="bi bi-check-circle text-success"></i>
-                            </div>
-                            <div>
-                                <small class="text-muted">2 روز پیش</small>
-                                <p class="mb-0">پرداخت شما با موفقیت انجام شد</p>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+                    @foreach($notifications as $notification)
+                        <li>
+                        <a href="{{ route('notifications.read', $notification->id) }}" class="dropdown-item d-flex gap-3 py-2">
+                        <div class="bg-primary bg-opacity-10 p-2 rounded">
+                                    <i class="bi {{ $notification->icon ?? 'bi-info-circle' }} text-primary"></i>
+                                </div>
+                                <div>
+                                    <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                    <p class="mb-0">{{ $notification->message }}</p>
+                                </div>
+                            </a>
+                        </li>
+                    @endforeach
+
             </div>
 
             {{-- دکمه خروج --}}
