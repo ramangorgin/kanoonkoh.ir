@@ -50,6 +50,13 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label for="jalali_date">تاریخ پرداخت</label>
+                <input type="text" id="jalali_date" class="form-control" placeholder="تاریخ پرداخت را وارد کنید" required>
+                <input type="hidden" name="date" id="gregorian_date">
+            </div>
+
+
             {{-- فایل رسید --}}
             <div class="mb-3 col-md-12">
                 <label class="form-label">آپلود رسید (اختیاری)</label>
@@ -107,6 +114,30 @@
         });
     });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/persian-date/dist/persian-date.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/persian-datepicker/dist/js/persian-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker/dist/css/persian-datepicker.min.css">
+
+<script>
+    $(document).ready(function () {
+        $("#jalali_date").persianDatepicker({
+            format: 'YYYY/MM/DD',
+            autoClose: true,
+            calendar: {
+                persian: {
+                    locale: 'fa'
+                }
+            },
+            altField: '#gregorian_date',
+            altFormat: 'YYYY-MM-DD',
+            altFieldFormatter: function (unix) {
+                return new persianDate(unix).toGregorian().format("YYYY-MM-DD");
+            }
+        });
+    });
+</script>
+
 @endpush
 
 @endsection

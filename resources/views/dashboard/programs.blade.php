@@ -1,45 +1,56 @@
 @extends('layouts.dashboard')
 
-@section('title', 'برنامه‌های من')
+@section('title', 'برنامه‌های گذرانده شده')
 
 @section('breadcrumb')
-    <a href="{{ route('dashboard.index') }}">داشبورد</a> / <span>برنامه‌های من</span>
+    <a href="{{ route('dashboard.index') }}">داشبورد</a> / <span>برنامه‌های گذرانده‌شده</span>
 @endsection
 
 @section('content')
 
-<h5 class="mb-3">برنامه‌های من</h5>
-{{-- بررسی ایمن برای اطمینان از وجود و شمارش‌پذیر بودن $programs --}}
-@if(isset($programs) && count($programs))
+<h5 class="mb-4">برنامه‌های گذرانده‌شده</h5>
+
+@if(isset($completedPrograms) && count($completedPrograms))
     <div class="table-responsive">
-        <table class="table table-bordered align-middle">
+        <table class="table table-bordered text-center align-middle">
             <thead class="table-light">
                 <tr>
-                    <th>عنوان</th>
+                    <th>نام برنامه</th>
                     <th>تاریخ شروع</th>
                     <th>تاریخ پایان</th>
-                    <th>توضیحات</th>
-                    <th>لینک/ثبت‌نام</th>
-                    <th>عملیات</th>
+                    <th>سرپرست</th>
+                    <th>کمک‌سرپرست</th>
+                    <th>مسئول فنی</th>
+                    <th>پشتیبان</th>
+                    <th>راهنما</th>
+                    <th>لینک اطلاعیه</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($programs as $program)
+                @foreach($completedPrograms as $program)
                     <tr>
                         <td>{{ $program->title }}</td>
-                        <td>{{ $program->start_date }}</td>
-                        <td>{{ $program->end_date }}</td>
-                        <td>{{ $program->description }}</td>
-                        <td><a href="{{ route('programs.show', $program) }}">مشاهده</a></td>
-                        <td>...</td>
+                        <td>{{ jdate($program->start_date)->format('Y/m/d') }}</td>
+                        <td>{{ jdate($program->end_date)->format('Y/m/d') }}</td>
+                        <td>{{ $program->leader_name ?? '—' }}</td>
+                        <td>{{ $program->assistant_leader_name ?? '—' }}</td>
+                        <td>{{ $program->technical_manager_name ?? '—' }}</td>
+                        <td>{{ $program->support_name ?? '—' }}</td>
+                        <td>{{ $program->guide_name ?? '—' }}</td>
+                        <td>
+                            @if($program->program_id)
+                                <a href="{{ route('programs.show', $program->program_id) }}" target="_blank" class="btn btn-sm btn-primary">مشاهده</a>
+                            @else
+                                <span class="text-muted">ندارد</span>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
 @else
-    <div class="alert alert-warning">
-شما هنوز در هیچ برنامه‌ای شرکت نکرده‌اید.     
-    </div>
+    <div class="alert alert-info">هیچ برنامه‌ای ثبت نشده است.</div>
 @endif
+
 @endsection

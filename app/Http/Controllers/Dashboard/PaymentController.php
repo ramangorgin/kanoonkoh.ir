@@ -41,6 +41,7 @@ class PaymentController extends Controller
             'related_id' => 'nullable|integer',
             'transaction_code' => 'required|string',
             'receipt_file' => 'nullable|file|max:2048',
+            'date' => 'required|date',
         ]);
 
         if ($request->hasFile('receipt_file')) {

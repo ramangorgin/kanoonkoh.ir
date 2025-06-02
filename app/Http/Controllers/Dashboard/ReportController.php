@@ -13,15 +13,23 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $reports = Report::where('user_id', Auth::id())->latest()->get();
+        $reports = Report::where('user_id', auth()->id())
+                 ->orWhere('writer_name', auth()->user()->full_name)
+                 ->latest()->get();
+
         return view('dashboard.reports.index', compact('reports'));
     }
 
     public function show($id)
     {
-        $report = Report::where('user_id', Auth::id())->findOrFail($id);
+        $report = Report::where(function($query) {
+                        $query->where('user_id', Auth::id())
+                              ->orWhere('writer_name', Auth::user()->full_name);
+                    })->findOrFail($id);
+    
         return view('dashboard.reports.show', compact('report'));
     }
+    
 
     public function create()
     {
@@ -117,14 +125,22 @@ class ReportController extends Controller
 
     public function edit($id)
     {
-        $report = Report::where('user_id', Auth::id())->findOrFail($id);
+        $report = Report::where(function($query) {
+                        $query->where('user_id', Auth::id())
+                              ->orWhere('writer_name', Auth::user()->full_name);
+                    })->findOrFail($id);
+    
         $programs = Program::all();
         return view('dashboard.reports.edit', compact('report', 'programs'));
     }
+    
 
     public function update(Request $request, $id)
     {
-        $report = Report::where('user_id', Auth::id())->findOrFail($id);
+        $report = Report::where(function($query) {
+            $query->where('user_id', Auth::id())
+                  ->orWhere('writer_name', Auth::user()->full_name);
+        })->findOrFail($id);
 
         $data = $request->validate([
             'program_id' => 'nullable|exists:programs,id',
@@ -210,7 +226,10 @@ class ReportController extends Controller
 
     public function destroy($id)
     {
-        $report = Report::where('user_id', Auth::id())->findOrFail($id);
+        $report = Report::where(function($query) {
+            $query->where('user_id', Auth::id())
+                  ->orWhere('writer_name', Auth::user()->full_name);
+        })->findOrFail($id);
 
         if ($report->pdf_path) {
             Storage::disk('public')->delete($report->pdf_path);

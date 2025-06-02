@@ -14,6 +14,7 @@ use App\Http\Controllers\ProgramRegistrationController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseRegistrationController;
 
+
 // گزارش‌های عمومی
 use App\Http\Controllers\ReportPublicController;
 
@@ -29,6 +30,10 @@ use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\TicketController;
 use App\Http\Controllers\Dashboard\SettingsController;
 use App\Http\Controllers\Dashboard\ReportController;
+use App\Http\Controllers\Dashboard\TicketReplyController;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -87,35 +92,43 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 | داشبورد کاربر
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->group(function () {
-    Route::prefix('dashboard')->group(function () {
-        Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
-        Route::get('/courses', [DashboardController::class, 'courses'])->name('dashboard.courses');
-        Route::get('/programs', [DashboardController::class, 'programs'])->name('dashboard.programs');
 
-        Route::get('/profile', [ProfileController::class, 'show'])->name('dashboard.profile');
-        Route::post('/profile', [ProfileController::class, 'store'])->name('dashboard.profile.store');
+    Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::get('/courses', [DashboardController::class, 'courses'])->name('courses');
+        Route::get('/programs', [DashboardController::class, 'programs'])->name('programs');
+
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+        Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
     
-        Route::get('/insurance', [InsuranceController::class, 'show'])->name('dashboard.insurance');
-        Route::post('/insurance', [InsuranceController::class, 'store'])->name('dashboard.insurance.store');
-        Route::patch('/insurance', [InsuranceController::class, 'update'])->name('dashboard.insurance.update');
+        Route::get('/insurance', [InsuranceController::class, 'show'])->name('insurance');
+        Route::post('/insurance', [InsuranceController::class, 'store'])->name('insurance.store');
+        Route::patch('/insurance', [InsuranceController::class, 'update'])->name('insurance.update');
         
-        Route::get('/payments', [PaymentController::class, 'index'])->name('dashboard.payments');
-        Route::post('/payments/store', [PaymentController::class, 'store'])->name('dashboard.payment.store');
+        Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
+        Route::post('/payments/store', [PaymentController::class, 'store'])->name('payment.store');
 
-        Route::get('/tickets', [TicketController::class, 'index'])->name('dashboard.tickets.index');
-        Route::get('/tickets/create', [TicketController::class, 'create'])->name('dashboard.tickets.create');
-        Route::post('/tickets/create', [TicketController::class, 'store'])->name('dashboard.tickets.store');
+        Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
+        Route::post('/settings', [SettingsController::class, 'updatePassword'])->name('settings.updatePassword');
 
-        Route::get('/settings', [DashboardController::class, 'settings'])->name('dashboard.settings');
-        Route::post('/settings', [SettingsController::class, 'updatePassword'])->name('dashboard.settings.updatePassword');
-
+        // Tickets
+        Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
+        Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
+        Route::post('/tickets/create', [TicketController::class, 'store'])->name('tickets.store');
+        Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
+        Route::post('/tickets/{ticket}/reply', [TicketReplyController::class, 'store'])->name('tickets.reply');
+        
         // Reports
-        Route::get('/reports', [ReportController::class, 'index'])->name('dashboard.reports.index');
-        Route::get('/reports/create', [ReportController::class, 'create'])->name('dashboard.reports.create');
-        Route::get('/reports/edit', [ReportController::class, 'edit'])->name('dashboard.reports.edit');
-        Route::get('/reports/show', [ReportController::class, 'show'])->name('dashboard.reports.show');
-        Route::post('/reports/create', [ReportController::class, 'store'])->name('dashboard.reports.create');
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
+        Route::get('/reports/edit', [ReportController::class, 'edit'])->name('reports.edit');
+        Route::get('/reports/show', [ReportController::class, 'show'])->name('reports.show');
+        Route::post('/reports/create', [ReportController::class, 'store'])->name('reports.create');
 
     });
-});
+
+
+Route::middleware(['web', 'auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(base_path('routes/admin.php'));

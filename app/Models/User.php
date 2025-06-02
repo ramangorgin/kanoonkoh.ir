@@ -25,7 +25,31 @@ class User extends Authenticatable
     public function notifications() {
         return $this->hasMany(Notification::class);
     }
-    
+
+    public function Admin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function getFullNameAttribute()
+    {
+        return trim($this->first_name . ' ' . $this->last_name);
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            \App\Models\Report::whereNull('user_id')
+                ->where('writer_name', $user->full_name)
+                ->update(['user_id' => $user->id]);
+        });
+    }
+
+    public function programParticipations()
+    {
+        return $this->hasMany(UserProgramParticipation::class);
+    }
+
     public function profile()
     {
         return $this->hasOne(\App\Models\Profile::class);
@@ -36,7 +60,7 @@ class User extends Authenticatable
         return $this->hasOne(Insurance::class);
     }
 
-    public function memberships()
+    public function payments()
     {
         return $this->hasMany(Payment::class);
     }

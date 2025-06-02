@@ -87,7 +87,7 @@
     </style>
 </head>
 <body>
-@include('layouts.partials.dashboard-header', ['notifications' => $notifications, 'unreadCount' => $unreadCount])
+@include('layouts.partials.dashboard-header')
 
     <div class="dashboard-container">
 

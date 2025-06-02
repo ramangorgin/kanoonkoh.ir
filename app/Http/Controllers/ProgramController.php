@@ -9,7 +9,7 @@ class ProgramController extends Controller
     public function index()
     {
         $programs = \App\Models\Program::all();
-        return view('dashboard.programs', compact('programs'));
+        return view('programs.index', compact('programs'));
     }
 
     public function show(Program $program)

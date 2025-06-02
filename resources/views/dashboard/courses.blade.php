@@ -1,74 +1,58 @@
-@extends('layouts.dashboard')
+@extends('dashboard.layouts.master')
 
-@section('title', 'دوره‌های من')
-
-@section('breadcrumb')
-    <a href="{{ route('dashboard.index') }}">داشبورد</a> / <span>دوره‌های من</span>
-@endsection
+@section('title', 'دوره‌های گذرانده‌شده')
 
 @section('content')
+<div class="container mt-4">
+    <h4 class="mb-4">دوره‌های گذرانده‌شده</h4>
 
-<h5 class="mb-3">دوره‌های من</h5>
-
-@if(!empty($courses))
-    <div class="table-responsive">
-        <table class="table table-bordered align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>عنوان دوره</th>
-                    <th>تاریخ برگزاری</th>
-                    <th>وضعیت</th>
-                    <th>گواهی</th>
-                    <th>عملیات</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($courses as $course)
+    @if(auth()->user()->courseCertificates->isEmpty())
+        <div class="alert alert-info">هنوز دوره‌ای برای شما ثبت نشده است.</div>
+    @else
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center align-middle">
+                <thead class="table-dark">
                     <tr>
-                        <td>
-                            <a href="{{ route('courses.show', $course->id) }}" target="_blank">
-                                {{ $course->title }}
-                            </a>
-                        </td>
-                        <td>{{ jdate($course->date)->format('Y/m/d') }}</td>
-                        <td>
-                            @php
-                                $status = $course->pivot->status;
-                            @endphp
-                            @if($status === 'approved')
-                                <span class="badge bg-success">پذیرفته‌شده</span>
-                            @elseif($status === 'pending')
-                                <span class="badge bg-warning text-dark">در انتظار</span>
-                            @else
-                                <span class="badge bg-danger">رد شده</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if($course->pivot->certificate_file)
-                                <a href="{{ asset('storage/' . $course->pivot->certificate_file) }}" target="_blank">دانلود گواهی</a>
-                            @else
-                                -
-                            @endif
-                        </td>
-                        <td>
-                            @if($course->date > now() && $status !== 'approved')
-                                <form action="{{ route('dashboard.courses.withdraw', $course->id) }}" method="POST" class="d-inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('آیا از انصراف اطمینان دارید؟')">انصراف</button>
-                                </form>
-                            @else
-                                -
-                            @endif
-                        </td>
+                        <th>ردیف</th>
+                        <th>نام دوره</th>
+                        <th>مدرس</th>
+                        <th>تاریخ شروع</th>
+                        <th>تاریخ پایان</th>
+                        <th>مدرک</th>
+                        <th>اطلاعیه دوره</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-@else
-<div class="alert alert-warning">
-شما هنوز در هیچ دوره‌ای شرکت نکرده‌اید.     
-    </div>
-@endif
+                </thead>
+                <tbody>
+                    @foreach(auth()->user()->courseCertificates as $index => $cert)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $cert->course_name ?? '-' }}</td>
+                            <td>{{ $cert->instructor ?? '-' }}</td>
+                            <td>{{ $cert->start_date ? jdate($cert->start_date)->format('Y/m/d') : '-' }}</td>
+                            <td>{{ $cert->end_date ? jdate($cert->end_date)->format('Y/m/d') : '-' }}</td>
+                            <td>
+                                @if($cert->certificate_path)
+                                    <a href="{{ asset('storage/' . $cert->certificate_path) }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                        دانلود
+                                    </a>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td>
+                                @if($cert->course)
+                                    <a href="{{ route('courses.show', $cert->course_id) }}" class="btn btn-sm btn-link text-info">
+                                        مشاهده
+                                    </a>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+</div>
 @endsection
