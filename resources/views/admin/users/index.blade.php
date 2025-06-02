@@ -11,7 +11,12 @@
 @section('content')
 <h3>مدیریت کاربران</h3>
 
-<a href="{{ route('admin.users.create') }}" class="btn btn-success mb-3">+ افزودن کاربر جدید</a>
+
+
+    <a href="{{ route('admin.users.create') }}" class="btn btn-success m-2 mb-4">+ افزودن کاربر جدید</a>
+
+
+
 
     <form method="GET" action="{{ route('admin.users.index') }}" class="mb-4">
         <div class="input-group">

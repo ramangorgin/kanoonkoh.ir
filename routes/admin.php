@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\UserProgramParticipationController;
     Route::post('users/{user}/add-certificate', [AdminUserController::class, 'addCertificate'])->name('users.addCertificate');
     Route::get('users/search', [AdminUserController::class, 'search'])->name('users.search');
 
+
     // دوره‌ها
     Route::resource('courses', AdminCourseController::class);
     Route::get('courses/search', [AdminCourseController::class, 'search'])->name('courses.search');
@@ -49,7 +50,6 @@ use App\Http\Controllers\Admin\UserProgramParticipationController;
     Route::post('registrations/{registration}/approve', [AdminRegistrationController::class, 'approve'])->name('registrations.approve');
     Route::post('registrations/{registration}/reject', [AdminRegistrationController::class, 'reject'])->name('registrations.reject');
     Route::get('registrations/{type}/{id}/export', [AdminRegistrationController::class, 'export'])->name('registrations.export');
-    Route::get('registrations/{type}/{id}/export/{status?}', [AdminRegistrationController::class, 'export'])->name('registrations.export');
     Route::get('registrations/export-pdf/{type}/{id}', [AdminRegistrationController::class, 'exportPdf'])->name('registrations.exportPdf');
 
 

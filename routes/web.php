@@ -49,6 +49,7 @@ Route::view('/conditions', 'conditions')->name('conditions');
 Route::view('/contact/confirm', 'contact-confirm')->name('contact.confirm');
 Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
 
+
 /*
 |--------------------------------------------------------------------------
 | برنامه‌ها
@@ -74,7 +75,6 @@ Route::middleware('auth')->post('/courses/{course}/register', [CourseRegistratio
 */
 Route::get('/reports', [ReportPublicController::class, 'index'])->name('reports.index');
 Route::get('/reports/{id}', [ReportPublicController::class, 'show'])->name('reports.show');
-Route::post('/reports/create', [ReportPublicController::class, 'store'])->name('dashboard.reports.store');
 
 /*
 |--------------------------------------------------------------------------
@@ -123,7 +123,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
         Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
         Route::get('/reports/edit', [ReportController::class, 'edit'])->name('reports.edit');
         Route::get('/reports/show', [ReportController::class, 'show'])->name('reports.show');
-        Route::post('/reports/create', [ReportController::class, 'store'])->name('reports.create');
+        Route::post('/reports/create', [ReportController::class, 'store'])->name('reports.store');
 
     });
 

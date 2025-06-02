@@ -103,4 +103,15 @@ class User extends Authenticatable
         return $this->first_name && $this->last_name && $this->avatar &&
             $this->membership_level && $this->membership_date && $this->score;
     }
+    
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole($role)
+    {
+        return $this->roles->pluck('name')->contains($role);
+    }
+
 }
