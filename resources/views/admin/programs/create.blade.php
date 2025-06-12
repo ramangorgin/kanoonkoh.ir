@@ -32,30 +32,60 @@
             <input type="text" name="title" class="form-control" required>
         </div>
 
-        <div class="mb-2">
-            <label>تاریخ برنامه</label>
-            <input id="date" name="date" class="form-control datepicker" required>
+        <div class="row">
+            <div class="form-group col">
+                <label>تاریخ شروع برنامه</label>
+                <input type="text" name="start_date" id="start_date" class="form-control">
+                </div>
+            <div class="form-group col">
+                <label>تاریخ پایان برنامه</label>
+                <input type="text" name="end_date" id="end_date" class="form-control">
+                </div>
         </div>
 
+
         {{-- مسئولین --}}
-        <div>
         <hr>
-        <h5 class="mb-3">مسئولان اجرایی</h5>
-        <div class="row">
-            @foreach([
-                'leader_name' => 'نام سرپرست',
-                'assistant_leader_name' => 'نام کمک‌سرپرست',
-                'technical_manager_name' => 'نام مسئول فنی',
-                'support_name' => 'نام پشتیبان',
-                'guide_name' => 'نام راهنما'
-            ] as $field => $label)
-                <div class="col-md-6 mb-2">
-                    <label>{{ $label }}</label>
-                    <input type="text" name="{{ $field }}" class="form-control">
+        <div class="card mt-4 shadow-sm border">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">🔰 مسئولین برنامه</h5>
+            </div>
+
+            <div class="card-body">
+                <p class="text-muted mb-3">
+                    لطفاً برای هر مسئول، نوع سمت (مثلاً سرپرست، پزشک، مترجم) را وارد کرده و سپس فرد مربوطه را انتخاب کنید.
+                </p>
+
+                <div id="roles-container">
+                <div class="row align-items-center mb-3 role-item">
+                        <div class="col-md-3">
+                            <input type="text" name="roles[0][role_title]" class="form-control" placeholder="سمت (مثلاً راهنما)">
+                        </div>
+
+                        <div class="col-md-4">
+                            <select name="roles[0][user_id]" class="form-control">
+                                <option value="">-- انتخاب کاربر از لیست --</option>
+                                @foreach($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <input type="text" name="roles[0][custom_name]" class="form-control" placeholder="یا نوشتن نام دلخواه (مثلاً آقای دکتر...)">
+                        </div>
+
+                        <div class="col-md-1 text-end">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeRole(this)"><i class="bi bi-x-square-fill"></i></button>
+                        </div>
+                    </div>
                 </div>
-            @endforeach
+
+                <button type="button" class="btn btn-outline-primary mt-2" onclick="addRole()">➕ افزودن مسئول دیگر</button>
+            </div>
         </div>
-        </div>
+
+
 
         <hr>
         {{-- حمل و نقل --}}
@@ -67,42 +97,45 @@
             </select>
         </div>
 
-        <div id="transport_section">
-            {{-- تهران --}}
-            <hr>
-            <h5 class="mt-3 mb-3">حرکت از تهران</h5>
-            <div class="mb-2">
-                <label>ساعت حرکت</label>
-                <input type="time" name="departure_time_tehran" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label>محل حرکت</label>
-                <input type="text" name="departure_place_tehran" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label>موقعیت روی نقشه</label>
-                <div id="map_tehran" style="height: 300px;"></div>
-                <input type="hidden" name="departure_lat_tehran" id="lat_tehran">
-                <input type="hidden" name="departure_lon_tehran" id="lon_tehran">
+        <div class="transport-fields">
+            <div id="transport_fields">
+                {{-- تهران --}}
+                <hr>
+                <h5 class="mt-3 mb-3">حرکت از تهران</h5>
+                <div class="mb-2">
+                    <label>ساعت و حرکت حرکت</label>
+                    <input type="text" name="departure_tehran_datetime" id="departure_tehran_datetime" class="form-control" placeholder="تاریخ و ساعت حرکت از تهران">
+                    </div>
+                <div class="mb-2">
+                    <label>محل حرکت</label>
+                    <input type="text" name="departure_place_tehran" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label>موقعیت روی نقشه</label>
+                    <div id="map_tehran" style="height: 300px;"></div>
+                    <input type="hidden" name="departure_lat_tehran" id="departure_lat_tehran">
+                    <input type="hidden" name="departure_lon_tehran" id="departure_lon_tehran">
+                </div>
+
+                {{-- کرج --}}
+                <hr>
+                <h5 class="mt-3 mb-3">حرکت از کرج</h5>
+                <div class="mb-2">
+                    <label>ساعت و حرکت حرکت</label>
+                    <input type="text" name="departure_karaj_datetime" id="departure_karaj_datetime" class="form-control" placeholder="تاریخ و ساعت حرکت از کرج">
+                    </div>
+                <div class="mb-2">
+                    <label>محل حرکت</label>
+                    <input type="text" name="departure_place_karaj" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label>موقعیت روی نقشه</label>
+                    <div id="map_karaj" style="height: 300px;"></div>
+                    <input type="hidden" name="departure_lat_karaj" id="departure_lat_karaj">
+                    <input type="hidden" name="departure_lon_karaj" id="departure_lon_karaj">
+                </div>
             </div>
 
-            {{-- کرج --}}
-            <hr>
-            <h5 class="mt-3 mb-3">حرکت از کرج</h5>
-            <div class="mb-2">
-                <label>ساعت حرکت</label>
-                <input type="time" name="departure_time_karaj" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label>محل حرکت</label>
-                <input type="text" name="departure_place_karaj" class="form-control">
-            </div>
-            <div class="mb-2">
-                <label>موقعیت روی نقشه</label>
-                <div id="map_karaj" style="height: 300px;"></div>
-                <input type="hidden" name="departure_lat_karaj" id="lat_karaj">
-                <input type="hidden" name="departure_lon_karaj" id="lon_karaj">
-            </div>
         </div>
 
         <div>
@@ -137,54 +170,58 @@
             <div class="mb-2">
                 <label>آیا برنامه رایگان است؟</label>
                 <select name="is_free" id="is_free" class="form-control">
-                    <option value="1">بله</option>
                     <option value="0">خیر</option>
+                    <option value="1">بله</option>
                 </select>
             </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <label>هزینه برای اعضا</label>
-                    <div class="input-group">
-                        <input type="number" name="member_price" class="form-control">
-                        <div class="input-group-append">
-                            <span class="input-group-text">ریال</span>
+            <div class="payment-fields">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>هزینه برای اعضا</label>
+                        <div class="input-group">
+                            <input type="number" name="member_cost" class="form-control">
+                            <div class="input-group-append">
+                                <span class="input-group-text">ریال</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>هزینه برای مهمان</label>
+                        <div class="input-group">
+                            <input type="number" name="guest_cost" class="form-control">
+                            <div class="input-group-append">
+                                <span class="input-group-text">ریال</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <label>هزینه برای مهمان</label>
-                    <div class="input-group">
-                        <input type="number" name="guest_price" class="form-control">
-                        <div class="input-group-append">
-                            <span class="input-group-text">ریال</span>
+                
+                <div>
+                    <hr>
+                    <h5>اطلاعات کارت بانکی</h5>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label>شماره کارت</label>
+                            <input type="text" name="card_number" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label>شماره شبا</label>
+                            <input type="text" name="sheba_number" class="form-control">
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label>نام دارنده کارت</label>
+                            <input type="text" name="card_holder" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                                <label>نام بانک</label>
+                                <input type="text" name="bank_name" class="form-control">
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div>
-            <hr>
-            <h5>اطلاعات کارت بانکی</h5>
-            
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <label>شماره کارت</label>
-                    <input type="text" name="card_number" class="form-control">
-                </div>
-                <div class="col-md-6">
-                    <label>شماره شبا</label>
-                    <input type="text" name="sheba_number" class="form-control">
-            </div>
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <label>نام دارنده کارت</label>
-                    <input type="text" name="card_holder" class="form-control">
-                </div>
-                <div class="col-md-6">
-                        <label>نام بانک</label>
-                        <input type="text" name="bank_name" class="form-control">
-                </div>
+                
             </div>
         </div>
 
@@ -202,7 +239,7 @@
 
                 <div class="col-md-6" id="registration_section">
                     <label>مهلت ثبت‌نام</label>
-                    <input id="registration_deadline" name="registration_deadline" class="form-control">
+                    <input type="text" name="registration_deadline" id="registration_deadline" class="form-control">
                 </div>
             </div>
         </div>
@@ -212,7 +249,7 @@
             {{-- آپلود عکس --}}
             <div class="mb-2">
                 <label>آپلود عکس‌های برنامه (حداکثر ۱۰ عدد)</label>
-                <input type="file" name="report_photos[]" class="form-control" multiple accept="image/*">
+                <input type="file" name="photos[]" class="form-control" multiple accept="image/*">
             </div>
 
             {{-- توضیحات --}}
@@ -226,88 +263,143 @@
     </form>
 </div>
 
-    @push('scripts')
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
-
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#description'), {
-                language: 'fa'
-            })
-            .catch(error => {
-                console.error(error);
-            });
+@push('scripts')
+<!-- CKEditor -->
+<script src="https://cdn.ckeditor.com/ckeditor5/41.3.1/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor.create(document.querySelector('#description'), { language: 'fa' })
+        .catch(error => console.error(error));
 </script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-    $(document).ready(function () {
 
+<!-- Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
         $('.select2').select2({ dir: "rtl", width: '100%' });
         $('.select2-tags').select2({ tags: true, dir: "rtl", width: '100%' });
 
-        // Select2 with search, multiple, and tag creation (for equipment and meals)
         $('#equipments, #meals').select2({
             tags: true,
             multiple: true,
             placeholder: 'انتخاب یا افزودن مورد جدید...',
             dir: "rtl"
-        });  
-    // تقویم برای تاریخ شروع
-    $('#date').persianDatepicker({
-        format: 'YYYY/MM/DD',
-        initialValue: false,
-        autoClose: true,
-        observer: true,
-        calendarType: 'persian',
-        navigator: {
-            enabled: true,
-            scroll: {
-                enabled: false
-            },
-            text: {
-                btnNextText: ">",
-                btnPrevText: "<"
+        });
+
+        // حمل و نقل
+        function toggleTransportFields() {
+            const value = $('#has_transport').val();
+            if (value === '1') {
+                $('.transport-fields').show();
+            } else {
+                $('.transport-fields').hide();
             }
         }
-    });
+
+        // رایگان بودن
+        function togglePaymentFields() {
+            const value = $('#is_free').val();
+            if (value === '0') {
+                $('.payment-fields').show();
+            } else {
+                $('.payment-fields').hide();
+            }
+        }
+
+        // اجرا هنگام بارگذاری
+        toggleTransportFields();
+        togglePaymentFields();
+
+        // تغییرات کاربر
+        $('#has_transport').on('change', toggleTransportFields);
+        $('#is_free').on('change', togglePaymentFields);
+
+        // تاریخ‌های شمسی + زمان
+        $('#start_date, #end_date').persianDatepicker({
+            format: 'YYYY/MM/DD',
+            initialValue: false,
+            autoClose: true,
+            observer: true,
+            calendarType: 'persian',
+            navigator: {
+                enabled: true,
+                scroll: { enabled: false },
+                text: { btnNextText: ">", btnPrevText: "<" }
+            }
+        });
+
+        $('#departure_tehran_datetime, #departure_karaj_datetime').persianDatepicker({
+            format: 'YYYY/MM/DD HH:mm',
+            initialValue: false,
+            autoClose: true,
+            observer: true,
+            calendarType: 'persian',
+            timePicker: { enabled: true, meridiem: { enabled: false } }
+        });
+
         $('#registration_deadline').persianDatepicker({
-        format: 'YYYY/MM/DD',
-        initialValue: false,
-        autoClose: true,
-        observer: true,
-        calendarType: 'persian',
-        navigator: {
-            enabled: true,
-            scroll: {
-                enabled: false
-            },
-            text: {
-                btnNextText: ">",
-                btnPrevText: "<"
-            }
+            format: 'YYYY/MM/DD HH:mm',
+            initialValue: false,
+            autoClose: true,
+            observer: true,
+            calendarType: 'persian',
+            timePicker: { enabled: true, meridiem: { enabled: false } }
+        });
+
+        // Leaflet Maps
+        function initMap(divId, latInputId, lonInputId) {
+            const map = L.map(divId).setView([35.7, 51.4], 9);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18
+            }).addTo(map);
+
+            let marker;
+            map.on('click', function (e) {
+                const { lat, lng } = e.latlng;
+                document.getElementById(latInputId).value = lat;
+                document.getElementById(lonInputId).value = lng;
+
+                if (marker) map.removeLayer(marker);
+                marker = L.marker(e.latlng).addTo(map);
+            });
         }
+
+        initMap('map_tehran', 'departure_lat_tehran', 'departure_lon_tehran');
+        initMap('map_karaj', 'departure_lat_karaj', 'departure_lon_karaj');
     });
 
-       // Leaflet maps
-    function initMap(divId, inputId) {
-        const map = L.map(divId).setView([35.7, 51.4], 9);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-        }).addTo(map);
-
-        let marker;
-        map.on('click', function (e) {
-            const latlng = `${e.latlng.lat},${e.latlng.lng}`;
-            document.getElementById(inputId).value = latlng;
-            if (marker) map.removeLayer(marker);
-            marker = L.marker(e.latlng).addTo(map);
-        });
+    // افزودن مسئول جدید
+    let roleIndex = 1;
+    function addRole() {
+        const container = document.getElementById('roles-container');
+        const html = `
+        <div class="row align-items-center mb-3 role-item">
+            <div class="col-md-3">
+                <input type="text" name="roles[${roleIndex}][role_title]" class="form-control" placeholder="سمت (مثلاً راهنما)">
+            </div>
+            <div class="col-md-4">
+                <select name="roles[${roleIndex}][user_id]" class="form-control">
+                    <option value="">-- انتخاب کاربر از لیست --</option>
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="roles[${roleIndex}][custom_name]" class="form-control" placeholder="یا وارد کردن نام دلخواه">
+            </div>
+            <div class="col-md-1 text-end">
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeRole(this)">×</button>
+            </div>
+        </div>`;
+        container.insertAdjacentHTML('beforeend', html);
+        roleIndex++;
     }
-    initMap('map_karaj');
-    initMap('map_tehran');
 
-        });
+    function removeRole(button) {
+        button.closest('.role-item').remove();
+    }
 </script>
 @endpush
 
