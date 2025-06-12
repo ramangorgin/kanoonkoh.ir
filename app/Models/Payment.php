@@ -10,12 +10,18 @@ use App\Models\User;
 class Payment extends Model
 {
     protected $fillable = [
-        'user_id', 'type', 'related_id', 'date', 'transaction_code',
-        'receipt_file', 'approved'
+        'user_id',
+        'type',
+        'related_id' ,
+        'year',
+        'transaction_code',
+        'receipt_file',
+        'amount', 
+        'approved'
+      
     ];
 
     protected $casts = [
-        'date' => 'datetime',
         'approved' => 'boolean',
     ];
 

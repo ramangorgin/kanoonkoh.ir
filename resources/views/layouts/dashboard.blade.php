@@ -200,11 +200,6 @@
             ⚙️ تنظیمات
             </a>
 
-            <a href="{{ route('dashboard.tickets.index') }}"
-            class="{{ request()->routeIs('dashboard.tickets.*') ? 'active-link' : '' }}">
-            🎫 تیکت‌ها
-            </a>
-
             <a href="{{ route('logout') }}">
                 🚪 خروج
             </a>

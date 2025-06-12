@@ -70,22 +70,6 @@
             </div>
         </div>
 
-        {{-- آخرین تیکت‌ها --}}
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header fw-bold">آخرین تیکت‌ها</div>
-                <div class="card-body p-2">
-                    <ul class="list-group list-group-flush">
-                        @foreach($latestTickets as $ticket)
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>{{ $ticket->user?->full_name ?? '---' }}</span>
-                                <span>{{ Str::limit($ticket->title, 20) }}</span>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="row mt-3">

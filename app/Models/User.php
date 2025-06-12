@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function profile()
     {
-        return $this->hasOne(\App\Models\Profile::class);
+        return $this->hasOne(Profile::class);
     }
 
     public function insurance()
@@ -80,11 +80,7 @@ class User extends Authenticatable
         return $this->hasMany(Report::class);
     }
 
-    public function tickets()
-    {
-        return $this->hasMany(Ticket::class);
-    }
-
+ 
         public function programRegistrations()
     {
         return $this->hasMany(ProgramRegistration::class);

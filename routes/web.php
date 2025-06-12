@@ -67,20 +67,13 @@ Route::prefix('dashboard')->name('dashboard.')->middleware('auth')->group(functi
 
     Route::get('/insurance', [InsuranceController::class, 'show'])->name('insurance');
     Route::post('/insurance', [InsuranceController::class, 'store'])->name('insurance.store');
-    Route::patch('/insurance', [InsuranceController::class, 'update'])->name('insurance.update');
-    
+
     Route::get('/payments', [PaymentController::class, 'index'])->name('payments');
-    Route::post('/payments/store', [PaymentController::class, 'store'])->name('payment.store');
+    Route::post('/payment', [PaymentController::class, 'store'])->name('payment.store');
 
     Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
     Route::post('/settings', [SettingsController::class, 'updatePassword'])->name('settings.updatePassword');
 
-    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
-    Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
-    Route::post('/tickets/create', [TicketController::class, 'store'])->name('tickets.store');
-    Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
-    Route::post('/tickets/{ticket}/reply', [TicketReplyController::class, 'store'])->name('tickets.reply');
-    
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/create', [ReportController::class, 'create'])->name('reports.create');
     Route::get('/reports/edit', [ReportController::class, 'edit'])->name('reports.edit');

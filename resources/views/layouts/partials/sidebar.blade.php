@@ -41,11 +41,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('dashboard.tickets') }}">
-                    تیکت‌ها
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="{{ route('dashboard.settings') }}">
                     تنظیمات
                 </a>

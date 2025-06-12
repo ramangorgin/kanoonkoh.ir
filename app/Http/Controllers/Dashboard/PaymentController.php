@@ -3,75 +3,53 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Payment;
-use App\Models\Transaction;
-use App\Models\Course;
-use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Payment;
 use Morilog\Jalali\Jalalian;
-
-
 
 class PaymentController extends Controller
 {
-
     public function index()
     {
-        $currentYear = Jalalian::now()->getYear();
-        $membershipYears = [];
-    
-        for ($i = -5; $i <= 5; $i++) {
-            $membershipYears[] = $currentYear + $i;
-        }
-    
-        return view('dashboard.payments', compact('membershipYears'));
-    }
+        $user = Auth::user();
 
-    public function create()
-    {
-        return $this->preparePaymentData();
+        $recentPrograms = $user->programs()->latest('program_user.created_at')->take(10)->get(['programs.id', 'programs.title']);
+        $recentCourses = $user->courses()->latest('course_user.created_at')->take(10)->get(['courses.id', 'courses.title']);
+
+        $currentYear = Jalalian::now()->getYear();
+        $membershipYears = range($currentYear - 5, $currentYear + 5);
+
+        $payments = $user->payments()->latest()->get();
+
+        return view('dashboard.payments', compact(
+            'recentPrograms',
+            'recentCourses',
+            'membershipYears',
+            'payments'
+        ));
     }
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'type' => 'required|in:Payment,course,program',
-            'year' => 'nullable|integer',
-            'related_id' => 'nullable|integer',
+        $validated = $request->validate([
+            'type' => 'required|string|in:membership,program,course',
+            'related_id' => 'nullable|numeric',
+            'year' => 'nullable|string',
+            'amount' => 'required|numeric|min:1',
             'transaction_code' => 'required|string',
-            'receipt_file' => 'nullable|file|max:2048',
-            'date' => 'required|date',
+            'receipt_file' => 'nullable|file|mimes:jpg,png,pdf|max:2048',
         ]);
+
+
+        $validated['user_id'] = Auth::id();
 
         if ($request->hasFile('receipt_file')) {
-            $data['receipt_file'] = $request->file('receipt_file')->store('receipts', 'public');
+            $validated['receipt_file'] = $request->file('receipt_file')->store('receipts', 'public');
         }
 
-        $data['user_id'] = Auth::id();
-        $data['approved'] = false;
+        Payment::create($validated);
 
-        Payment::create($data);
-
-        return redirect()->route('dashboard.payments')->with('success', 'پرداخت با موفقیت ثبت شد.');
-    }
-
-    protected function preparePaymentData()
-    {
-        $user = auth()->user();
-
-        $jalaliYears = collect(range(now()->year, now()->year - 5))
-            ->map(fn($year) => [
-                'gregorian' => $year,
-                'jalali' => Jalalian::fromDateTime("$year-03-21")->getYear(),
-            ]);
-
-        return view('dashboard.payments', [
-            'latestTransaction' => optional($user->transactions()->latest()->first()),
-            'recentCourses' => Course::latest()->take(5)->get(),
-            'recentPrograms' => Program::latest()->take(5)->get(),
-            'PaymentYears' => $jalaliYears,
-            'programs' => Program::all(),
-        ]);
+        return redirect()->back()->with('success', 'پرداخت با موفقیت ثبت شد.');
     }
 }

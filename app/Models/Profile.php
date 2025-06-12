@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Profile extends Model
 {
-   protected $fillable = [
+    protected $fillable = [
         'user_id',
         'first_name',
         'last_name',
@@ -24,21 +24,22 @@ class Profile extends Model
         'personal_photo',
         'blood_type',
         'job',
-        'introducer',
-        'height',
-        'weight',
-        'physical_condition',
+        'referrer',
+        'height_cm',
+        'weight_km',
+        'medical_conditions',
         'allergies',
         'medications',
         'had_surgery',
-        'emergency_person_name',
-        'emergency_person_relation',
-        'role', // عضو یا ادمین
+        'emergency_contact_name',
+        'emergency_contact_relation',
+        'role',
         'membership_level',
         'membership_status',
         'membership_date',
         'points'
     ];
+    
     
 
     protected $casts = [

@@ -21,12 +21,11 @@ class DashboardController extends Controller
             ->count();
     
         return view('dashboard.index', [
-            'user' => $user,
+            'user' => Auth::user()->load('profile'),
             'needsCompletion' => !$user->profile || !$user->profile->first_name,
             'programs' => $user->programs()->latest()->get(),
             'courses' => $user->courses()->latest()->get(),
             'reports' => $user->reports()->latest()->get(),
-            'tickets' => $user->tickets()->latest()->get(),
             'notifications' => $notifications,
             'unreadCount' => $unreadCount,
         ]);
@@ -66,16 +65,6 @@ class DashboardController extends Controller
         return view('dashboard.participation');
     }
 
-    // ----------------- Tickets -------------------
-    public function ticketsIndex()
-    {
-        return view('dashboard.tickets.index');
-    }
-
-    public function ticketsCreate()
-    {
-        return view('dashboard.tickets.create');
-    }
 
     // ----------------- Reports -------------------
     public function reportsIndex()

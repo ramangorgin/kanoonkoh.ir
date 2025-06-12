@@ -8,6 +8,8 @@ use App\Models\Profile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Services\DateService;
+use Morilog\Jalali\Jalalian;  
+
 
 class ProfileController extends Controller
 {
@@ -15,10 +17,10 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $profile = $user->profile;
-    
+
         return view('dashboard.profile', [
             'profile' => $profile,
-            'hasProfile' => $profile !== null
+            'hasProfile' => $profile !== null,
         ]);
     }
 
@@ -26,6 +28,10 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
+        // تاریخ تولد تبدیل‌شده
+        $gregorianDate = DateService::convertJalaliToGregorian($request->birth_date);
+
+        // قوانین اعتبارسنجی
         $rules = [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
@@ -44,33 +50,47 @@ class ProfileController extends Controller
             'job' => 'nullable|string',
             'referrer' => 'nullable|string',
             'height_cm' => 'nullable|numeric',
-            'weight_km' => 'nullable|numeric',
+            'weight_kg' => 'nullable|numeric',
             'medical_conditions' => 'nullable|string',
             'allergies' => 'nullable|string',
             'medications' => 'nullable|string',
             'had_surgery' => 'nullable|boolean',
-            'emergency_person_name' => 'nullable|string',
-            'emergency_person_relation' => 'nullable|string',
+            'emergency_contact_name' => 'nullable|string',
+            'emergency_contact_relation' => 'nullable|string',
         ];
 
         $validated = $request->validate($rules);
 
-        try {
-            $validated['birth_date'] = DateService::convertJalaliToGregorian($request->birth_date);
-        } catch (\Exception $e) {
-            return back()->withErrors(['birth_date' => 'تاریخ وارد شده نامعتبر است'])->withInput();
-        }
+        $validated['birth_date'] = Jalalian::fromFormat('Y-m-d', convertNumbersToEnglish($request->birth_date))
+        ->toCarbon()
+        ->toDateString();
+
+
+        $profile = $user->profile;
 
         if ($request->hasFile('personal_photo')) {
-            $validated['personal_photo'] = $request->file('personal_photo')->store('profile_photos', 'public');
+            if ($profile && $profile->personal_photo) {
+                Storage::delete($profile->personal_photo);
+            }
+
+            $validated['personal_photo'] = $request->file('personal_photo')->store('profiles', 'public');
         }
 
-        $profile = $user->profile ?? new Profile(['user_id' => $user->id]);
-        $profile->fill($validated);
-        $profile->role = 'member'; 
-        $profile->save();
+        // ساخت یا به‌روزرسانی
+        if ($profile) {
+            $profile->update($validated);
+        } else {
+            $user->profile()->create($validated);
+        }
 
-        return redirect()->route('dashboard.profile')->with('success', 'مشخصات با موفقیت ذخیره شد.');
+        return redirect()->back()->with('success', 'مشخصات با موفقیت ذخیره شد.');
     }
 
+  
+    
+}
+function convertNumbersToEnglish($string) {
+    $persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+    $english = ['0','1','2','3','4','5','6','7','8','9'];
+    return str_replace($persian, $english, $string);
 }

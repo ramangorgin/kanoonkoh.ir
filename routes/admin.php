@@ -62,13 +62,5 @@ use App\Http\Controllers\Admin\UserProgramParticipationController;
     Route::get('surveys/programs', [AdminSurveyController::class, 'programIndex'])->name('surveys.programs');
     Route::get('surveys/stats', [AdminSurveyController::class, 'stats'])->name('surveys.stats');
 
-    // تیکت‌ها
-    Route::prefix('tickets')->name('tickets.')->group(function () {
-        Route::get('/', [AdminTicketController::class, 'index'])->name('index');
-        Route::get('/{ticket}', [AdminTicketController::class, 'show'])->name('show');
-        Route::post('/{ticket}/reply', [AdminTicketReplyController::class, 'store'])->name('reply');
-        Route::post('/{ticket}/close', [AdminTicketController::class, 'close'])->name('close');
-        Route::post('/{ticket}/reopen', [AdminTicketController::class, 'reopen'])->name('reopen');
-        Route::patch('tickets/{ticket}/toggle', [AdminTicketController::class, 'toggleStatus'])->name('toggle');
-    });
+
     

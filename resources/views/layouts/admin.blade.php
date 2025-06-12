@@ -134,7 +134,6 @@
                 <li class="nav-item"><a href="{{ route('admin.registrations.index') }}" class="nav-link"><i class="bi bi-person-check-fill me-2"></i> ثبت‌نام‌ها</a></li>
                 <li class="nav-item"><a href="{{ route('admin.insurances.index') }}" class="nav-link"><i class="bi bi-shield-check me-2"></i> بیمه‌ها</a></li>
                 <li class="nav-item"><a href="{{ route('admin.payments.index') }}" class="nav-link"><i class="bi bi-credit-card-2-front-fill me-2"></i> پرداخت‌ها</a></li>
-                <li class="nav-item"><a href="{{ route('admin.tickets.index') }}" class="nav-link"><i class="bi bi-chat-dots-fill me-2"></i> تیکت‌ها</a></li>
                 <li class="nav-item"><a href="{{ route('admin.surveys.stats') }}" class="nav-link"><i class="bi bi-bar-chart-line-fill me-2"></i> آمار نظرسنجی‌ها</a></li>
             </ul>
         </div>

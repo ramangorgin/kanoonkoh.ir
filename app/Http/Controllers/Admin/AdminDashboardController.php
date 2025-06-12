@@ -26,8 +26,7 @@ class AdminDashboardController extends Controller
         // جدیدترین پرداختی‌ها
         $latestPayments = Payment::with('user')->latest()->take(5)->get();
 
-        // جدیدترین تیکت‌ها
-        $latestTickets = Ticket::with('user')->latest()->take(5)->get();
+  
 
         // ثبت‌نام‌های برنامه
         $latestProgramRegs = Registration::with(['user', 'relatedProgram'])
@@ -49,7 +48,6 @@ class AdminDashboardController extends Controller
             'programsCount',
             'reportsCount',
             'latestPayments',
-            'latestTickets',
             'latestProgramRegs',
             'latestCourseRegs'
         ));

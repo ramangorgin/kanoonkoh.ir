@@ -33,20 +33,24 @@
     @if (!$needsCompletion)
         <div class="card mb-4">
             <div class="card-body d-flex align-items-center">
-                <img src="{{ $user->profile_photo_url ?? asset('images/default-avatar.png') }}"
+                <img src="{{ $user->profile && $user->profile->personal_photo ? asset('storage/' . $user->profile->personal_photo) : asset('images/default-avatar.png') }}"
                     class="rounded-circle me-3" width="80" height="80" alt="avatar">
                 <div>
-                    <h5 class="mb-0">{{ $user->first_name }} {{ $user->last_name }}</h5>
-                    <small class="text-muted">سطح عضویت: {{ $user->membership_level ?? 'تعریف نشده' }}</small><br>
+                    <h5 class="mb-0">
+                        {{ $user->profile->first_name ?? '' }} {{ $user->profile->last_name ?? '' }}
+                    </h5>
+                    <small class="text-muted">
+                        سطح عضویت: {{ $user->profile->membership_status ?? 'تعریف نشده' }}
+                    </small><br>
                     <small class="text-muted">
                         تاریخ عضویت:
-                        {{ $user->membership_date ? jdate($user->membership_date)->format('Y/m/d') : '---' }}
-                    </small><br>
-                    <small class="text-muted">امتیاز: {{ $user->points ?? 0 }}</small>
+                        {{ $user->profile->membership_date ? jdate($user->profile->membership_date)->format('Y/m/d') : '---' }}
+                    </small>
                 </div>
             </div>
         </div>
     @endif
+
 
 
     <div class="row g-4">
@@ -116,15 +120,6 @@
             </div>
         </div>
 
-        {{-- پشتیبانی --}}
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">پشتیبانی</div>
-                <div class="card-body">
-                    <a href="{{ route('dashboard.tickets.index') }}" class="btn btn-sm btn-outline-primary">ارسال تیکت</a>
-                </div>
-            </div>
-        </div>
 
         {{-- تنظیمات --}}
         <div class="col-md-6">
