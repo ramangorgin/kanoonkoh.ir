@@ -1,0 +1,1 @@
+RedirectMatch 404 ^/laravel/(app|bootstrap|config|database|resources|routes|storage|tests|vendor)/.*
